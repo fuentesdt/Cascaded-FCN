@@ -2,6 +2,10 @@
 https://hub.docker.com/r/patrickchrist/cascadedfcn/
 docker pull patrickchrist/cascadedfcn
 
+# get python script from notebook #
+	jupyter nbconvert --to script notebooks/cascaded_unet_inference.ipynb
+
+
 # Cascaded-FCN #
 This repository contains the pre-trained models for a Cascaded-FCN in caffe and tensorflow that segments the liver and its lesions out of axial CT images and a python wrapper for dense 3D Conditional Random Fields 3D CRFs.
 
