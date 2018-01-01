@@ -4,6 +4,7 @@ docker pull patrickchrist/cascadedfcn
 
 # get python script from notebook #
 	jupyter nbconvert --to script notebooks/cascaded_unet_inference.ipynb
+        ipython qtconsole  --> run cascaded_unet_inference.py
 
 
 # Cascaded-FCN #

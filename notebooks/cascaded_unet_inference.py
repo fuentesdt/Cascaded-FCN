@@ -20,8 +20,8 @@
 
 
 # Get model weights (step1 and step2 models)
-get_ipython().system(u'wget --tries=2 -O ../models/cascadedfcn/step1/step1_weights.caffemodel https://www.dropbox.com/s/aoykiiuu669igxa/step1_weights.caffemodel?dl=1')
-get_ipython().system(u'wget --tries=2 -O ../models/cascadedfcn/step2/step2_weights.caffemodel https://www.dropbox.com/s/ql10c37d7ura23l/step2_weights.caffemodel?dl=1')
+#get_ipython().system(u'wget --tries=2 -O ../models/cascadedfcn/step1/step1_weights.caffemodel https://www.dropbox.com/s/aoykiiuu669igxa/step1_weights.caffemodel?dl=1')
+#get_ipython().system(u'wget --tries=2 -O ../models/cascadedfcn/step2/step2_weights.caffemodel https://www.dropbox.com/s/ql10c37d7ura23l/step2_weights.caffemodel?dl=1')
 
 
 # In[ ]:
