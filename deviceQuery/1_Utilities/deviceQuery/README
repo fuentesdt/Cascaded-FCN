@@ -1,0 +1,11 @@
+$ ldconfig -p | grep cud
+        libicudata.so.55 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libicudata.so.55
+        libicudata.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libicudata.so
+        libcudnn.so.5 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libcudnn.so.5
+        libcudnn.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libcudnn.so
+        libcudart.so.7.5 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libcudart.so.7.5
+        libcudart.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libcudart.so
+        libcuda.so.1 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libcuda.so.1
+        libcuda.so (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libcuda.so
+
+
