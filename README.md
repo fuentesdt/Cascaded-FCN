@@ -1,10 +1,42 @@
 # get docker image #
+```
 https://hub.docker.com/r/patrickchrist/cascadedfcn/
 docker pull patrickchrist/cascadedfcn
+```
 
 # get python script from notebook #
-	jupyter nbconvert --to script notebooks/cascaded_unet_inference.ipynb
-        ipython qtconsole  --> run cascaded_unet_inference.py
+```
+jupyter nbconvert --to script notebooks/cascaded_unet_inference.ipynb
+ipython qtconsole  --> run cascaded_unet_inference.py
+```
+
+# get caffe version from docker
+```
+root@maeda:/opt/caffe# cat .git/config
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[remote "origin"]
+        url = https://github.com/mohamed-ezz/caffe.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+[branch "jonlong"]
+        remote = origin
+        merge = refs/heads/jonlong
+root@maeda:/opt/caffe# git log
+commit 876e387a6d7f8974f68f42beacd3728b4fc92ff7
+Author: Mohamed Ezz <moh.ezz8@gmail.com>
+Date:   Thu Feb 18 01:24:04 2016 +0100
+
+    Add class weighting feature for softmax_loss layer
+
+$ git clone https://github.com/mohamed-ezz/caffe.git caffe/docker
+$ cd caffe/docker;  git branch docker 876e387a6d7f8974f68f42beacd3728b4fc92ff7 ; git checkout docker
+```
 
 
 # Cascaded-FCN #
