@@ -39,9 +39,9 @@ STEP2_MODEL_WEIGHTS   = "../models/cascadedfcn/step2/step2_weights.caffemodel"
 import caffe
 print caffe.__file__
 # Use CPU for inference
-caffe.set_mode_cpu()
+#caffe.set_mode_cpu()
 # Use GPU for inference
-#caffe.set_mode_gpu()
+caffe.set_mode_gpu()
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -176,6 +176,18 @@ def normalize_image(img):
     return (img - min_) / (max_ - min_)
 
 
+def histeq_processor(img):
+        """Histogram equalization"""
+        nbr_bins=256
+        #get image histogram
+        imhist,bins = np.histogram(img.flatten(),nbr_bins,normed=True)
+        cdf = imhist.cumsum() #cumulative distribution function
+        cdf = 255 * cdf / cdf[-1] #normalize
+        #use linear interpolation of cdf to find new pixel values
+        original_shape = img.shape
+        img = np.interp(img.flatten(),bins[:-1],cdf)
+        img=img/255.0
+        return img.reshape(original_shape)
 
 # ### Volume Preprocessing functions ### 
 
@@ -214,11 +226,11 @@ def step1_preprocess_img_slice(img_slc):
     img_slc   = img_slc.astype(IMG_DTYPE)
     img_slc[img_slc>1200] = 0
     img_slc   = np.clip(img_slc, -100, 400)    
+    #if True:
+    #    img_slc = histeq_processor(img_slc)
     img_slc   = normalize_image(img_slc)
     img_slc   = to_scale(img_slc, (388,388))
     img_slc   = np.pad(img_slc,((92,92),(92,92)),mode='reflect')
-    if False:
-        img_slc = histeq_processor(img_slc)
 
     return img_slc
 
@@ -284,14 +296,14 @@ def step2_preprocess_img_slice(img_p, step1_pred):
 # In[ ]:
 
 
-# Download image 17 of 3DIRCAdb1 dataset
-get_ipython().system(u'wget http://www.ircad.fr/softwares/3Dircadb/3Dircadb1/3Dircadb1.17.zip -O 3Dircadb1.17.zip')
-# Unzip into test_image
-get_ipython().system(u'unzip -o 3Dircadb1.17.zip -d test_image/')
-# Unzip the image CT volume
-get_ipython().system(u'unzip -o test_image/3Dircadb1.17/PATIENT_DICOM.zip -d test_image/3Dircadb1.17/')
-# Unzip the label masks
-get_ipython().system(u'unzip -o test_image/3Dircadb1.17/MASKS_DICOM.zip -d test_image/3Dircadb1.17/')
+## # Download image 17 of 3DIRCAdb1 dataset
+## get_ipython().system(u'wget http://www.ircad.fr/softwares/3Dircadb/3Dircadb1/3Dircadb1.17.zip -O 3Dircadb1.17.zip')
+## # Unzip into test_image
+## get_ipython().system(u'unzip -o 3Dircadb1.17.zip -d test_image/')
+## # Unzip the image CT volume
+## get_ipython().system(u'unzip -o test_image/3Dircadb1.17/PATIENT_DICOM.zip -d test_image/3Dircadb1.17/')
+## # Unzip the label masks
+## get_ipython().system(u'unzip -o test_image/3Dircadb1.17/MASKS_DICOM.zip -d test_image/3Dircadb1.17/')
 
 
 # In[ ]:
@@ -312,25 +324,25 @@ lbl=read_liver_lesion_masks("test_image/3Dircadb1.17/MASKS_DICOM/")
 img.shape, lbl.shape
 
 
-# #### Visualize raw input slices ####
-
-# In[ ]:
-
-
-for s in range(50,100,20):
-    imshow(img[...,s],lbl[...,s])
-
-
-# #### Visualize preprocessed slices ####
-
-# In[ ]:
-
-
-for s in range(50,100,20):
-    print s
-    img_p = step1_preprocess_img_slice(img[...,s])
-    lbl_p = preprocess_lbl_slice(lbl[...,s])
-    imshow(img_p,lbl_p)
+## # #### Visualize raw input slices ####
+## 
+## # In[ ]:
+## 
+## 
+## for s in range(50,100,20):
+##     imshow(img[...,s],lbl[...,s])
+## 
+## 
+## # #### Visualize preprocessed slices ####
+## 
+## # In[ ]:
+## 
+## 
+## for s in range(50,100,20):
+##     print s
+##     img_p = step1_preprocess_img_slice(img[...,s])
+##     lbl_p = preprocess_lbl_slice(lbl[...,s])
+##     imshow(img_p,lbl_p)
 
 
 # ### Load network prototxt and weights and perform prediction ###
@@ -402,6 +414,8 @@ net2 = caffe.Net(STEP2_DEPLOY_PROTOTXT, STEP2_MODEL_WEIGHTS, caffe.TEST)
 net2.blobs['data'].data[0,0,...] = img_p2
 pred2 = net2.forward()['prob'][0,1]
 print pred2.shape
+# Free up memory of step2 network
+del net2
 
 
 # In[ ]:
